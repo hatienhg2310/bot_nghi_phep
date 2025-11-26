@@ -44,7 +44,10 @@ async function handleLeaveRequestForm(interaction) {
     leaveDate: Validators.sanitizeInput(interaction.fields.getTextInputValue('leave_date'))
   };
 
-  // Validate department
+  // Validate department - DISABLED: Allow any department name
+  // NOTE: Department validation is currently disabled to allow flexible department names
+  // Uncomment the code below to enable strict department validation
+  /*
   if (!config.departments.includes(formData.department)) {
     storeDraftFormData(interaction, formData);
 
@@ -61,6 +64,7 @@ async function handleLeaveRequestForm(interaction) {
       flags: MessageFlags.Ephemeral
     });
   }
+  */
 
   // Validate basic form data
   const basicValidation = validateBasicFormData(formData);

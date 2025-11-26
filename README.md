@@ -48,25 +48,33 @@ GOOGLE_SHEETS_ID=186feLNr-gAvBXLhzDonjm85fWrOt59nHJd142onzBJ4
 GOOGLE_SHEET_NAME=Sheet1
 GOOGLE_SERVICE_ACCOUNT_EMAIL=your_service_account_email@project.iam.gserviceaccount.com
 GOOGLE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nyour_private_key_here\n-----END PRIVATE KEY-----"
-
-# Department Manager Mapping
-# ⚠️ IMPORTANT: Replace placeholder IDs with REAL Discord User IDs
-# How to get Discord User ID:
-# 1. Enable Developer Mode in Discord (User Settings > App Settings > Advanced > Developer Mode)
-# 2. Right-click on the user > Copy User ID
-MANAGER_NHAN_SU=your_real_discord_user_id_here
-MANAGER_KE_TOAN=your_real_discord_user_id_here
-MANAGER_KINH_DOANH=your_real_discord_user_id_here
-MANAGER_KY_THUAT=your_real_discord_user_id_here
-MANAGER_MARKETING=your_real_discord_user_id_here
 ```
 
-### 5. Deploy commands
+### 5. Cấu hình danh sách quản lý
+
+Chỉnh sửa file `id.csv` để thêm danh sách quản lý và Discord User ID của họ:
+
+```csv
+STT,Họ và tên,Chức vụ,ID
+1,Nguyễn Văn A,Department Manager,123456789012345678
+2,Trần Thị B,Leader Marketing,234567890123456789
+3,Lê Văn C,Leader Designer,345678901234567890
+```
+
+**Cách lấy Discord User ID:**
+1. Bật **Developer Mode** trong Discord: `User Settings > App Settings > Advanced > Developer Mode`
+2. Click chuột phải vào tên người dùng > **Copy User ID**
+
+**⚠️ Lưu ý quan trọng:**
+- Tên trong file CSV phải khớp **CHÍNH XÁC** (bao gồm hoa/thường, dấu) với tên mà nhân viên nhập vào form
+- Khi nhân viên điền form, họ sẽ nhập tên quản lý trực tiếp, bot sẽ tự động tìm Discord ID tương ứng từ file này
+
+### 6. Deploy commands
 ```bash
 node src/deploy-commands.js
 ```
 
-### 6. Khởi chạy bot
+### 7. Khởi chạy bot
 ```bash
 npm start
 ```
@@ -95,8 +103,10 @@ npm run dev
 
 ## 🔧 Cấu hình
 
-### Phòng ban và Trưởng phòng
-Chỉnh sửa trong `src/config/config.js`:
+### Phòng ban
+
+Danh sách phòng ban được sử dụng trong form dropdown. Chỉnh sửa trong `src/config/config.js`:
+
 ```javascript
 departments: [
   'Nhân sự',
@@ -105,13 +115,27 @@ departments: [
   'Kỹ thuật',
   'Marketing'
 ],
-
-departmentManagers: {
-  'Nhân sự': 'DISCORD_USER_ID',
-  'Kế toán': 'DISCORD_USER_ID',
-  // ...
-}
 ```
+
+**⚠️ Lưu ý:** Phòng ban chỉ dùng để hiển thị thông tin, **KHÔNG** dùng để xác định người duyệt đơn.
+
+### Quản lý và người duyệt đơn
+
+Danh sách quản lý được quản lý trong file `id.csv`:
+
+```csv
+STT,Họ và tên,Chức vụ,ID
+1,Phạm Tuấn Anh,Department Manager,1353938845812654150
+2,Bùi Phương Linh,Department Manager,1399621564240232508
+3,Võ Hoài Nam,Leader Marketing,1355009413878120540
+```
+
+**Cách hoạt động:**
+1. Nhân viên nhập tên "Quản lý trực tiếp" vào form (ví dụ: "Phạm Tuấn Anh")
+2. Bot tự động tìm Discord ID tương ứng trong file `id.csv`
+3. Bot gửi thông báo duyệt đơn đến Discord ID đó
+
+**⚠️ Quan trọng:** Tên phải khớp **CHÍNH XÁC** (hoa/thường, dấu) giữa form và file CSV
 
 ### Google Sheets
 - Cột B-I: Dữ liệu form
